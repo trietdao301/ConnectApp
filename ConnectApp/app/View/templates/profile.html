@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="profile-container">
+        <h1>Profile Page</h1>
+
+        <div class="user-info">
+            <h2>User Information</h2>
+            <p><strong>Username:</strong></p>
+            <p>{{ user.username }}</p>
+            <p><strong>Email:</strong></p>
+            <p>{{ user.email }}</p>
+            <p><strong>First Name:</strong></p>
+            <p>{{ user.first_name }}</p>
+            <p><strong>Last Name:</strong></p>
+            <p>{{ user.last_name }}</p>
+            <p><strong>WSU ID:</strong></p>
+            <p>{{ user.wsu_id }}</p>
+            <p><strong>Phone Number:</strong></p>
+            <p>{{ user.display_phone_number() }}</p>
+            <p><strong>User Type:</strong></p>
+            <p>{{ user.user_type }}</p>
+        </div>
+
+        {% if student %}
+        <div class="student-info">
+            <p><strong>Major:</strong></p>
+            <p>{{ student.major }}</p>
+            <p><strong>GPA:</strong></p>
+            <p>{{ student.gpa }}</p>
+            <p><strong>Expected Graduation:</strong></p>
+            <p>{{ student.expected_graduation }}</p>
+            <div>
+                <p><strong>Programming Languages:</strong></p>
+                {% with plangs = student.programming_languages %}
+                    {% if plangs.count() == 0 %}
+                        <p>None</p>
+                    {% else %}
+                        {% for plang in plangs %}
+                            <li>{{ plang.name }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div>
+                <p><strong>Research Topics:</strong></p>
+                {% with rfields = student.research_fields %}
+                    {% if rfields.count() == 0 %}
+                        <p>None</p>
+                    {% else %}
+                        {% for rfield in rfields %}
+                            <li>{{rfield.name}}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <h2>Applications Submitted:</h2>
+            <table class="posttable">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Statement</th>
+                        <th>Faculty Name</th>
+                        <th>Faculty Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in user.applications %}
+                        <tr>
+                            <td>{{ application.title }}</td>
+                            <td>{{ application.status }}</td>
+                            <td>{{ application.statement }}</td>
+                            <td>{{ application.faculty_name }}</td>
+                            <td>{{ application.faculty_email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if faculty %}
+        <div class="faculty-info">
+            <p><strong>Department:</strong></p>
+            <p>{{ faculty.department }}</p>
+        </div>
+        {% endif %}
+        <a href="{{url_for('routes.edit_profile')}}"><button class="button">Edit Profile</button></a>
+        <br>
+        <br>
+        <a href="{{url_for('routes.index')}}"><button class="button">Return to main page</button></a>
+    </div>
+{% endblock %}

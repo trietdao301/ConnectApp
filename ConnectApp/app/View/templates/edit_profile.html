@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form-container">
+    <h1>Edit Profile</h1>
+
+    {% if form %}
+        <form action="" method="post" name="register">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(disabled=true, class="greyed-out forminput") }}
+                {% for error in form.username.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class='forminput') }}
+                {% for error in form.password.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password2.label }}
+                {{ form.password2(class='forminput') }}
+                {% for error in form.password2.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.first_name.label }}
+                {{ form.first_name(class='forminput') }}
+                {% for error in form.first_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.last_name.label }}
+                {{ form.last_name(class='forminput') }}
+                {% for error in form.last_name.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.wsu_id.label }}
+                {{ form.wsu_id(class='forminput') }}
+                {% for error in form.wsu_id.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.phone_number.label }}
+                {{ form.phone_number(class='forminput') }}
+                {% for error in form.phone_number.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div id="studentFields" style="display: none;">
+                <div class="form-group">
+                    {{ form.major.label }}
+                    {{ form.major(class='forminput') }}
+                </div>
+                <div class="form-group">
+                    {{ form.gpa.label }}
+                    {{ form.gpa(class='forminput') }}
+                </div>
+                <div class="form-group">
+                    {{ form.expected_graduation.label }}
+                    {{ form.expected_graduation(class='forminput') }}
+                </div>
+                <div class="form-group">
+                    {{ form.research_field.label }}
+                    {{ form.research_field(class='forminput') }}
+                </div>
+                <div class="form-group">
+                    {{ form.programming_language.label }}
+                    {{ form.programming_language(class='forminput') }}
+                </div>
+                <div class="form-group">
+                    {{ form.prior_exp.label }}
+                    {{ form.prior_exp(class='forminput') }}
+                </div>
+            </div>
+            
+            <div id="facultyFields" style="display: none;">
+                <div class="form-group">
+                    {{ form.department.label }}
+                    {{ form.department(class='forminput') }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="button") }}
+            </div>
+        </form>
+    {% endif %}
+    <script>
+        var userType = "{{ current_user.user_type }}";
+        if (userType === 'Student') {
+            document.getElementById('studentFields').style.display = 'block';
+            document.getElementById('facultyFields').style.display = 'none';
+        } else if (userType === 'Faculty') {
+            document.getElementById('studentFields').style.display = 'none';
+            document.getElementById('facultyFields').style.display = 'block';
+        } else {
+            document.getElementById('studentFields').style.display = 'none';
+            document.getElementById('facultyFields').style.display = 'none';
+        }
+    </script>
+    </div>
+{% endblock %}

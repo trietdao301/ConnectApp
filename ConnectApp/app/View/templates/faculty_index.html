@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}    
+        <h2>Hi {{ faculty.first_name }}!</h2>
+        <div class = "positionlist">
+            {% for position in positions %}
+                {% include '_position.html' %}
+            {% endfor %}
+        </div>
+{% endblock %}

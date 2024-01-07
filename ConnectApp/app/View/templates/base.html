@@ -1,0 +1,46 @@
+<html>
+    <head>
+        {% if title %}
+            <title>{{ title }} - Research Positions</title>
+        {% else %}
+            <title>Welcome to Job Search!</title>
+        {% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {{ moment.include_moment() }}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        <nav class="nav-container">
+            <ul>
+                <li><a href="{{ url_for('routes.index') }}" class="button">Home</a></li>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.user_type == 'Faculty' %}
+                        <li><a href="{{ url_for('routes.post_position') }}" class="button">Post new position</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('auth.logout') }}" class="button">Logout</a></li>
+                    <li><a href="{{ url_for('auth.profile') }}" class="button">View Profile</a></li>
+                    <li><a class="button"> Current user:{{ current_user.username }} </a></li>
+                {% else %}
+                    <li><a href="{{ url_for('auth.register') }}" class="button">Register</a></li>
+                    <li><a href="{{ url_for('auth.login') }}" class="button">Login</a></li>
+                    <li><a class="button">Not Signed In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div class="message-container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

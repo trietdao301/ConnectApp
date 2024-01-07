@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form-container">
+        <h1>{{ current_position.title }}</h1>
+        <table class="posttable">
+            <thead>
+                <tr valign="bottom" align="left">
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Status of Other Applications</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in current_position.submissions %}
+                    {% set student = application.studentsapplied %}
+                    <tr>
+                        <td>{{ student.last_name }}, {{ student.first_name }}</td>
+                        <td>{{ application.status }}</td>
+                        <td>
+                            <ul>
+                                {% if student.check_if_appliactions_for_list_out_is_none(current_position.id) %}
+                                    <li>None</li>
+                                {% else %}
+                                    {% for appli in student.get_applications_for_list_out(current_position.id) %}
+                                        <li>{{ appli.title }} - {{ appli.status }}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('routes.qualification', positionid=current_position.id, studentid=student.id) }}" class="button">View Qualifications</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('routes.index') }}" class="button">Return to Main Page</a>
+    </div>
+{% endblock %}

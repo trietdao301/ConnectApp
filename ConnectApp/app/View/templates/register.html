@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form-container">
+        <h1>Register</h1>
+
+        {% if form %}
+            <form action="" method="post" name="register">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.user_type.label }}
+                    <br>
+                    {{ form.user_type(class='forminput', type="date") }}
+                    {% for error in form.user_type.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class='forminput') }}
+                    {% for error in form.email.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class='textinput') }}
+                    {% for error in form.password.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password2.label }}
+                    {{ form.password2(class='textinput') }}
+                    {% for error in form.password2.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.first_name.label }}
+                    {{ form.first_name(class='textinput') }}
+                    {% for error in form.first_name.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.last_name.label }}
+                    {{ form.last_name(class='textinput') }}
+                    {% for error in form.last_name.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.wsu_id.label }}
+                    {{ form.wsu_id(class='textinput') }}
+                    {% for error in form.wsu_id.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.phone_number.label }}
+                    {{ form.phone_number(class='textinput') }}
+                    {% for error in form.phone_number.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div id="studentFields" style="display: none;">
+                    <div class="form-group">
+                        {{ form.major.label }}
+                        {{ form.major(class='textinput') }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.gpa.label }}
+                        {{ form.gpa(class='textinput') }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.expected_graduation.label }}
+                        {{ form.expected_graduation(class='textinput', type="date") }}
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>{{ form.research_field.label }}</label>
+                        <div class="checkbox-container">
+                            {% for subfield in form.research_field %}
+                                <div class="checkbox-item">
+                                    {{ subfield }} {{ subfield.label }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <br><br>
+                    
+                    <div class="form-group checkbox-group">
+                        <label>{{ form.programming_language.label }}</label>
+                        <div class="checkbox-container">
+                            {% for language in form.programming_language %}
+                                <div class="checkbox-item">
+                                    {{ language }} {{ language.label }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                    <div class="form-group">
+                        {{ form.prior_exp.label }}
+                        {{ form.prior_exp(class='forminput') }}
+                    </div>
+                </div>
+                
+                <div id="facultyFields" style="display: none;">
+                    <div class="form-group">
+                        {{ form.department.label }}
+                        {{ form.department(class='textinput') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.submit(class="button") }}
+                </div>
+            </form>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('user_type').addEventListener('change', function () {
+            var userType = this.value;
+            if (userType === 'Student') {
+                document.getElementById('studentFields').style.display = 'block';
+                document.getElementById('facultyFields').style.display = 'none';
+            } else if (userType === 'Faculty') {
+                document.getElementById('studentFields').style.display = 'none';
+                document.getElementById('facultyFields').style.display = 'block';
+            } else {
+                document.getElementById('studentFields').style.display = 'none';
+                document.getElementById('facultyFields').style.display = 'none';
+            }
+        });
+    </script>
+{% endblock %}

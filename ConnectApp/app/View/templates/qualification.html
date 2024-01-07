@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="profile-container">
+        {% if student %}
+            <h2>Student Information</h2>
+            <div class="student-info">
+                <p><strong>Major:</strong></p>
+                <p>{{ student.major }}</p>
+                <p><strong>GPA:</strong></p>
+                <p>{{ student.gpa }}</p>
+                <p><strong>Expected Graduation:</strong></p>
+                <p>{{ student.expected_graduation }}</p>
+                <p><strong>Research Topic:</strong></p>
+                {% with rfields = student.research_fields %}
+                    {% if rfields.count() == 0 %}
+                        <p>None</p>
+                    {% else %}
+                        {% for rfield in rfields %}
+                            <li>{{ rfield.name }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <p><strong>Programming Language:</strong></p>
+                {% with plangs = student.programming_languages %}
+                    {% if plangs.count() == 0 %}
+                        <p>None</p>
+                    {% else %}
+                        {% for plang in plangs %}
+                            <li>{{ plang.name }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <p><strong>Prior experience:</strong></p>
+                <p>{{ student.prior_exp }}</p>
+            </div>
+        {% endif %}
+
+        <div class="action-buttons">
+            <a href="{{url_for('routes.application', positionid=positionid, studentid=student.student_id)}}" class="button">View Application</a>
+            <br>
+            <br>
+            <a href="{{url_for('routes.applicants', positionid=positionid)}}" class="button">Return to Applicants Page</a>
+        </div>
+    </div>
+{% endblock %}

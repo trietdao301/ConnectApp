@@ -1,0 +1,59 @@
+<table class="posttable">
+    <tr>
+        <td colspan="3">
+            <div class="posttitle">{{ position.title }}</div>
+        </td>
+    </tr>
+    <tr>
+        <td class="faculty-info">
+            <div><strong>Posted by:</strong> {{ position.faculty.last_name }}, {{ position.faculty.first_name }}</div>
+            <div><strong>Contact information:</strong> {{ position.faculty.display_phone_number() }}</div>
+        </td>
+        <td class="position-details">
+            <div><strong>Description</strong>: {{ position.description }}</div>
+            <div><strong>Other Requirement</strong>: {{ position.qualification_description }}</div>
+            
+            <div>
+                <strong>Programming languages</strong>:
+                <ul>
+                    {% with plangs = position.get_programming_languages().all() %}
+                        {% for plang in plangs %}
+                            <li>{{ plang.name }};</li>
+                        {% endfor %}
+                    {% endwith %}
+                </ul>
+                <strong>Research Field</strong>:
+                <ul>
+                    {% with rfields = position.get_research_fields().all() %}
+                        {% for rfield in rfields %}
+                            <li class="tagitem">{{ rfield.name }}</li>
+                        {% endfor %}
+                    {% endwith %}
+                </ul>
+            </div>
+            <div class="date">
+                <strong>Starts</strong>: {{ moment(position.start_date).format('LL') }}
+                <br>
+                <strong>Ends</strong>: {{ moment(position.end_date).format('LL') }}
+            </div>
+        </td>
+        <td class="action-buttons">
+            {% if current_user.is_student() == False and position.faculty_id == current_user.id %}
+            <div class = "delete-button">
+                <a href="{{ url_for('routes.applicants', positionid=position.id) }}" class="button" style="text-align: center;margin-bottom: 20%;">View Students</a>
+                <br>
+                <a href="{{ url_for('routes.delete_position', positionid=position.id) }}" class="button" style="position:relative;left: 23%;">Delete</a>
+            </div>
+            {% endif %}
+            {% if current_user.is_student() %}
+                {% if not current_user.has_application_for_position(position.id) %}
+                    <a href="{{ url_for('routes.apply', position_id=position.id) }}" class="button">Apply</a>
+                {% else %}
+                    <div class="application-status" style="text-align: center;"><strong>Status:</strong> {{ current_user.get_application(position.id).status }}</div>
+                    <br><br>
+                    <a href="{{ url_for('routes.withdraw', position_id=position.id) }}" class="button" style="position: relative;left:10%;">Withdraw</a>
+                {% endif %}
+            {% endif %}
+        </td>
+    </tr>
+</table>

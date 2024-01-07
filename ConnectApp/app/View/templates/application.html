@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="form-container">
+        <h1>Application Form</h1>
+
+        {% if form %}
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <p>Please write a short description of why you are interested in this position:</p>
+                    {{ form.statement(disabled=true, class="forminput") }}
+                </div>
+
+                <div class="form-group">
+                    <h4 style="font-style: italic;">Please provide the information of one reference.</h4>
+                    <p>Enter the name of the reference:</p>
+                    {{ form.faculty_name(disabled=true, class="forminput") }}
+                </div>
+
+                <div class="form-group">
+                    <p>Enter the email of the reference:</p>
+                    {{ form.faculty_email(disabled=true, class="forminput") }}
+                </div>
+            </form>
+
+            {% if application.status == "Pending" %}
+                <div class="action-buttons">
+                    <a href="{{url_for('routes.approve', positionid = positionid, studentid = studentid)}}" class="button">Approve</a>
+                    <a href="{{url_for('routes.applicants', positionid = positionid)}}" class="button">Decline</a>
+                </div>
+            {% elif application.status == "Approved for Interview" %}
+                <div class="action-buttons">
+                    <a href="{{url_for('routes.hire', positionid = positionid, studentid = studentid)}}" class="button">Hired</a>
+                    <a href="{{url_for('routes.reject', positionid = positionid, studentid = studentid)}}" class="button">Not Hired</a>
+                </div>
+            {% endif %}
+            <br>
+            <div class="action-buttons">
+                <a href="{{url_for('routes.qualification', positionid = positionid, studentid = studentid)}}" class="button">Return back to qualification</a>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

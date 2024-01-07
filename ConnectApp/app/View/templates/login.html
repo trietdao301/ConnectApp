@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="form-container">
+        <h1>Sign In</h1>
+
+        {% if form %}
+            <form action="" method="post" name="login" class="login-form">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label>{{ form.username.label }}</label>
+                    {{ form.username(class='forminput') }}
+                    {% for error in form.username.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.password.label }}</label>
+                    {{ form.password(class='textinput') }}
+                    {% for error in form.password.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.submit(class="button") }}
+                </div>
+            </form>
+        {% endif %}
+        <p class="register-link">New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+    </div>
+{% endblock %}

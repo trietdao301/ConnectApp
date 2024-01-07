@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+        <h1>Welcome to Connect app!</h1>
+        <h2>Hi {{ student.first_name }}!</h2>
+    
+        <h2 id="count" class="user-info">Number of open positions: {{ positions|count }}</h2>
+        
+        <div class="form-group">
+            <label for="checkbox1">
+                <input type="checkbox" id="checkbox1" name="Show research field">
+                Recommend positions related to my research field<i>(Hide the rest)</i>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="checkbox2">
+                <input type="checkbox" id="checkbox2" name="Show programming languages">
+                Recommend positions related to my programming language<i>(Hide the rest)</i>
+            </label>
+        </div>
+
+        <br>
+        
+        <script>
+            function setdate(){
+                var title_array = document.querySelectorAll('.posttitle');
+                var looper = 0;
+                for (let title of title_array){
+                    var replacement_start = "";
+                    var replacement_end = "";
+                    var title_string = title.textContent.trim();
+                    var start_array= document.getElementById("start_date").textContent.split("\n");
+                    var end_array= document.getElementById("end_date").textContent.split("\n");
+                    for (let i = 0; i < start_array.length; i++) {
+                        var item1 = start_array[i];
+                        var item2 = end_array[i];
+                        if (item1!=undefined && item2!=undefined){
+                            if (item1.includes(title_string) && item2.includes(title_string) ){
+                                var start_date = item1.split(":")[1];
+                                var end_date = item2.split(":")[1];
+                                replacement_start = "<b>Starts: </b>" + start_date + "<br>";
+                                replacement_end = "<b>Ends: </b>" + end_date + "<br>";
+                                break;
+                            }
+                        }
+                        
+                    }
+                    var array = document.querySelectorAll('.date');
+                    array[looper].innerHTML = replacement_start + replacement_end;
+                    looper+=1;
+                }
+            }
+            
+            let one = false;
+            let two = false;
+            var word = "";
+            document.getElementById("checkbox1").addEventListener("change",function(){
+                (this.checked) ? one = true : one = false;
+                if (one && !two){
+                    document.getElementById("0").style.display = "none";
+                    document.getElementById("1").style.display = "block";
+                    document.getElementById("2").style.display = "none";
+                    document.getElementById("3").innerHTML = "";
+                    document.getElementById("1").innerHTML = "";
+                    var number = 0;
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.research_fields.all() %}"
+                            
+                            "{% if rfield in position.research_fields.all() %}"
+                                if (counter == 0){
+                                    var html1=`{% include '_position.html' %}`;
+                                    document.getElementById("1").innerHTML += html1;
+                                    counter = 1;
+                                    number+=1;
+                                    
+                                }
+                            "{% endif %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+                    
+                }
+                else if (!one && two){
+                    document.getElementById("2").innerHTML = "";
+                    var number = 0;
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.programming_languages.all() %}"
+                            
+                            "{% if rfield in position.programming_languages.all() %}"
+                                if (counter == 0 ){
+                                    var html2=`{% include '_position.html' %}`;
+                                    document.getElementById("2").innerHTML += html2;
+                                    counter = 1;
+                                    number+=1;
+                                }
+                            "{% endif %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    document.getElementById("3").innerHTML = "";
+                    document.getElementById("2").style.display = "block";
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+                }
+                else if (one&&two){
+                    var number = 0;
+                    document.getElementById("0").style.display = "none";
+                    document.getElementById("1").style.display = "none";
+                    document.getElementById("2").style.display = "none";
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.research_fields.all() %}"
+                            
+                            "{% for pfield in student.programming_languages.all() %}"
+                                "{% if rfield in position.research_fields.all() and pfield in position.programming_languages.all() %}"
+                                    if (counter == 0){
+                                        var html3=`{% include '_position.html' %}`;
+                                        document.getElementById("3").innerHTML += html3;
+                                        counter = 1;
+                                        number+=1;
+                                        
+                                    }
+                                "{% endif %}"
+                            "{% endfor %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+                }
+                else if (!one && !two){
+                    document.getElementById("0").style.display = "block";
+                    document.getElementById("1").style.display = "none";
+                    document.getElementById("2").style.display = "none";
+                    document.getElementById("3").innerHTML = "";
+                    document.getElementById("count").innerText = "Number of open positions: " + "{{ positions|count }}";
+                }
+                
+                });
+                
+            document.getElementById("checkbox2").addEventListener("change",function(){
+                
+                (this.checked) ? two = true : two = false;
+                if (two && !one){
+                    var number = 0;
+                    document.getElementById("0").style.display = "none";
+                    document.getElementById("1").style.display = "none";
+                    document.getElementById("2").style.display = "block";
+                    document.getElementById("2").innerHTML = "";
+                    
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.programming_languages.all() %}"
+                            
+                            "{% if rfield in position.programming_languages.all() %}"
+                                if (counter == 0){
+                                    var html2=`{% include '_position.html' %}`;
+                                    document.getElementById("2").innerHTML += html2;
+                                    counter = 1;
+                                    number+=1;
+                                    
+                                }
+                            "{% endif %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    
+                    
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+                }
+                else if (!two && one){
+                    var number = 0;
+                    document.getElementById("1").innerHTML = "";
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.research_fields.all() %}"
+                            
+                            "{% if rfield in position.research_fields.all() %}"
+                                if (counter == 0){
+                                    var html1=`{% include '_position.html' %}`;
+                                    document.getElementById("1").innerHTML += html1;
+                                    counter = 1;
+                                    number+=1;
+                                    
+                                }
+                            "{% endif %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    document.getElementById("1").style.display = "block";
+                    document.getElementById("3").innerHTML = "";
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+                    
+                }
+                else if (one&&two){
+                    document.getElementById("0").style.display = "none";
+                    document.getElementById("1").style.display = "none";
+                    document.getElementById("2").style.display = "none";
+                    var number = 0;
+                    "{% for position in positions %}"
+                        var counter =0;
+                        "{% for rfield in student.research_fields.all() %}"
+                            
+                            "{% for pfield in student.programming_languages.all() %}"
+                                "{% if rfield in position.research_fields.all() and pfield in position.programming_languages.all() %}"
+                                    if (counter == 0){
+                                        var html3=`{% include '_position.html' %}`;
+                                        document.getElementById("3").innerHTML += html3;
+                                        counter = 1;
+                                        number+=1;
+                                        
+                                    }
+                                "{% endif %}"
+                            "{% endfor %}"
+                        "{% endfor %}"
+                    "{% endfor %}"
+                    setdate();
+                    document.getElementById("count").innerText = "Number of open positions: " + number.toString();
+
+                }
+                else if (!two && !one){
+                    document.getElementById("0").style.display = "block";
+                    document.getElementById("1").style.display = "none";
+                    document.getElementById("2").style.display = "none";
+                    document.getElementById("3").innerHTML = "";
+                
+                document.getElementById("count").innerText = "Number of open positions: " + "{{ positions|count }}";
+                }
+                
+                });
+        </script>
+
+        <div id="0" class="positionlist">
+            {% for position in positions %}
+                {% include '_position.html' %}
+            {% endfor %}
+        </div>
+        <div id="1" class="positionlist"></div>
+        <div id="2" class="positionlist"></div>
+        <div id="3" class="positionlist"></div>
+        
+        <div id="start_date" style="display:none;">
+            {% for position in positions %}
+                {{ position.title }}:{{ moment(position.start_date).format('LL') }}
+            {% endfor %}
+        </div>
+        <div id="end_date" style="display: none;">
+            {% for position in positions %}
+                {{ position.title }}:{{ moment(position.end_date).format('LL') }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
