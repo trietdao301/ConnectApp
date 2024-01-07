@@ -1,6 +1,4 @@
 Connect App Starter Code - includes tests
-![Sample Image](./picture/login.png)
-![Sample Image](./picture/home.png)
 
 Requirements.txt is updated on Aug 2023
 
